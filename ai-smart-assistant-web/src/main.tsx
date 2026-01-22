@@ -7,10 +7,12 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import "./index.css";
 import App from "./app/App.tsx";
+import { GlobalToast } from "./common/components/GlobalToast";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <PrimeReactProvider>
+      <GlobalToast />
       <App />
     </PrimeReactProvider>
   </StrictMode>,

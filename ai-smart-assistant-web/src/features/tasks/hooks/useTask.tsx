@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchTasks, createTask } from "../api/tasks.api";
+import { fetchTasks, createTask, createTaskWithAi } from "../api/tasks.api";
 import type { CreateTask } from "../schemas/task.schema";
 
 export function useTasks() {
@@ -15,11 +15,14 @@ export function useTasks() {
 
   const addTask = async (title: string) => {
     const newTask = await createTask(title);
+    console.log("`newTask``", newTask);
     setTasks((prev) => [newTask, ...prev]);
   };
 
-  const addLocalTask = (task: CreateTask) => {
-    setTasks((prev) => [task, ...prev]);
+  const addLocalTask = async (task: CreateTask) => {
+    const newTaskwithAi = await createTaskWithAi(task.title);
+    console.log("`newTaskwithAi``", newTaskwithAi);
+    setTasks((prev) => [newTaskwithAi, ...prev]);
   };
 
   useEffect(() => {

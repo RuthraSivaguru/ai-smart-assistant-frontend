@@ -8,6 +8,7 @@ import { Protected } from "../components/protectedRoute";
 import Login from "../features/auth/pages/login";
 import Register from "../features/auth/pages/register";
 import Dashboard from "../features/dashboard/pages/dashboard";
+import { MaintenancePage } from "../common/pages/Maintenance";
 import { redirect } from "@tanstack/react-router";
 
 // Root route
@@ -52,11 +53,18 @@ const dashboardRoute = createRoute({
   ),
 });
 
+const maintenanceRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/maintenance",
+  component: MaintenancePage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
   registerRoute,
   dashboardRoute,
+  maintenanceRoute,
 ]);
 
 export const router = createRouter({

@@ -10,3 +10,9 @@ export const createTask = async (title: string): Promise<CreateTask> => {
     title,
   })) as unknown as CreateTask;
 };
+
+export const createTaskWithAi = async (title: string): Promise<CreateTask> => {
+  return (await httpClient.post("/tasks/ai", {
+    title,
+  })) as unknown as CreateTask;
+};

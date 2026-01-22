@@ -24,12 +24,11 @@ export default function Login() {
       const res = await loginApi(form);
       console.log("Login response", res);
       login(res.access_token);
-      navigate({ to: "/dashboard" });
-      alert("Login successful");
+      await navigate({ to: "/dashboard" });
+      // No alert, and let component unmount with loading=true
     } catch (error) {
       console.log("Login error", error);
-      alert("Login failed");
-    } finally {
+      // Removed alert
       setLoading(false);
     }
   };
