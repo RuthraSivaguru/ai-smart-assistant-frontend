@@ -42,16 +42,26 @@ const registerRoute = createRoute({
   component: Register,
 });
 
-// Protected route
-const dashboardRoute = createRoute({
+import DashboardLayout from "../common/components/DashboardLayout";
+
+// Protected Layout Route
+const protectedLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/dashboard",
+  id: "protected",
   component: () => (
     <Protected>
-      <Dashboard />
+      <DashboardLayout />
     </Protected>
   ),
 });
+
+const dashboardRoute = createRoute({
+  getParentRoute: () => protectedLayoutRoute,
+  path: "/dashboard",
+  component: Dashboard,
+});
+
+protectedLayoutRoute.addChildren([dashboardRoute]);
 
 const maintenanceRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -63,7 +73,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
   registerRoute,
-  dashboardRoute,
+  protectedLayoutRoute,
   maintenanceRoute,
 ]);
 
