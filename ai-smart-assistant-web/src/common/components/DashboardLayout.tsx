@@ -9,7 +9,7 @@ export const DashboardLayout = () => {
   const [mobileVisible, setMobileVisible] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-slate-50 relative overflow-hidden flex-column md:flex-row">
+    <div className="flex h-screen bg-slate-50 relative overflow-hidden flex-column md:flex-row">
       {/* Animated Background Mesh */}
       <div className="fixed inset-0 top-0 left-0 w-full h-full -z-1 overflow-hidden pointer-events-none">
         <motion.div

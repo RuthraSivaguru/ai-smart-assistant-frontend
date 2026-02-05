@@ -66,7 +66,7 @@ export default function Dashboard() {
   };
 
   const itemAnimations: Variants = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
+    hidden: { opacity: 0, scale: 0.9, y: 40 },
     show: {
       opacity: 1,
       scale: 1,
@@ -192,7 +192,7 @@ export default function Dashboard() {
         ))}
 
         {/* Main Area */}
-        <motion.div variants={itemAnimations} className="col-12 lg:col-8 mt-4">
+        {/* <motion.div variants={itemAnimations} className="col-12 lg:col-8 mt-4">
           <div
             className="surface-card border-round-3xl shadow-3 h-full overflow-hidden border-1 border-transparent"
             style={{
@@ -232,10 +232,10 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Distribution Chart */}
-        <motion.div variants={itemAnimations} className="col-12 lg:col-4 mt-4">
+        {/* <motion.div variants={itemAnimations} className="col-12 lg:col-4 mt-4">
           <div
             className="surface-card border-round-3xl shadow-3 h-full flex flex-column bg-white border-1 border-transparent"
             style={{
@@ -274,7 +274,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </motion.div>
   );

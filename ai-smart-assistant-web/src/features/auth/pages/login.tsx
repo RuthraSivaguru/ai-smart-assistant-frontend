@@ -11,6 +11,7 @@ import { useNavigate } from "@tanstack/react-router";
 export default function Login() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
+  const setIsAuthenticating = useAuthStore((s) => s.setIsAuthenticating);
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -20,6 +21,7 @@ export default function Login() {
     if (!parsed.success) return;
 
     setLoading(true);
+    setIsAuthenticating(true);
     try {
       const res = await loginApi(form);
       console.log("Login response", res);
@@ -30,6 +32,7 @@ export default function Login() {
       console.log("Login error", error);
       // Removed alert
       setLoading(false);
+      setIsAuthenticating(false);
     }
   };
 

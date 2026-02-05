@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "../store/auth.store";
 import { Button } from "primereact/button";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 interface SidebarProps {
   isMobile?: boolean;
@@ -10,14 +11,40 @@ interface SidebarProps {
 
 export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const logout = useAuthStore((s) => s.logout);
+  const setIsAuthenticating = useAuthStore((s) => s.setIsAuthenticating);
+
+  const handleLogout = () => {
+    setIsAuthenticating(true);
+    // Add a small delay for the animation to be visible
+    setTimeout(() => {
+      logout();
+    }, 1000);
+  };
 
   const menuItems = [
-    { icon: "pi-home", label: "Dashboard", id: "dashboard" },
-    { icon: "pi-list", label: "My Tasks", id: "tasks" },
-    { icon: "pi-calendar", label: "Calendar", id: "calendar" },
-    { icon: "pi-chart-bar", label: "Analytics", id: "analytics" },
-    { icon: "pi-cog", label: "Settings", id: "settings" },
+    {
+      icon: "pi-home",
+      label: "Dashboard",
+      id: "dashboard",
+      path: "/dashboard",
+    },
+    { icon: "pi-list", label: "My Tasks", id: "tasks", path: "/tasks" },
+    {
+      icon: "pi-calendar",
+      label: "Calendar",
+      id: "calendar",
+      path: "/calendar",
+    },
+    {
+      icon: "pi-chart-bar",
+      label: "Analytics",
+      id: "analytics",
+      path: "/analytics",
+    },
+    { icon: "pi-cog", label: "Settings", id: "settings", path: "/settings" },
   ];
 
   const sidebarVariants = {
@@ -37,9 +64,7 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
       }}
     >
       {/* Logo Section */}
-      <div
-        className={`p-4 flex align-items-center justify-content-between ${isMobile ? "" : "border-2"}`}
-      >
+      <div className={`p-4 flex align-items-center justify-content-between`}>
         <AnimatePresence mode="wait">
           {(!isCollapsed || isMobile) && (
             <motion.div
@@ -108,23 +133,27 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
 
       {/* Nav Items */}
       <div className="flex-1 px-3 flex flex-column gap-2">
-        {menuItems.map((item) => (
-          <motion.div
-            key={item.id}
-            whileHover={{ scale: 1.02, x: 5 }}
-            whileTap={{ scale: 0.98 }}
-            className={`flex align-items-center gap-3 p-3 border-round-xl cursor-pointer transition-colors duration-200 ${
-              item.id === "dashboard"
-                ? "bg-primary text-white shadow-2"
-                : "text-600 hover:bg-primary-50 hover:text-primary"
-            }`}
-          >
-            <i className={`pi ${item.icon} text-lg`}></i>
-            {!isCollapsed && (
-              <span className="font-semibold text-sm">{item.label}</span>
-            )}
-          </motion.div>
-        ))}
+        {menuItems.map((item) => {
+          const isActive = location.pathname.startsWith(item.path);
+          return (
+            <motion.div
+              key={item.id}
+              whileHover={{ scale: 1.02, x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex align-items-center gap-3 p-3 border-round-xl cursor-pointer transition-colors duration-200 ${
+                isActive
+                  ? "bg-primary text-black shadow-2"
+                  : "text-600 hover:bg-primary-50 hover:text-primary"
+              }`}
+              onClick={() => navigate({ to: item.path as any })}
+            >
+              <i className={`pi ${item.icon} text-lg`}></i>
+              {!isCollapsed && (
+                <span className="font-semibold text-sm">{item.label}</span>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Bottom Actions */}
@@ -135,7 +164,7 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
           severity="danger"
           text
           className={`w-full ${isCollapsed ? "flex justify-content-center" : "justify-content-start"} font-semibold`}
-          onClick={logout}
+          onClick={handleLogout}
         />
       </div>
     </motion.div>
