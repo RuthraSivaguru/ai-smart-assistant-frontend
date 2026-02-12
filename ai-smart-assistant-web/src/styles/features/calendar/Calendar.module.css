@@ -1,0 +1,72 @@
+.calendarContainer {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.gridHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+}
+
+.gridBody {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: #e2e8f0;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.paddingDay {
+  height: 9rem;
+  background: #f8fafc;
+  opacity: 0.4;
+}
+
+.dayCell {
+  height: 9rem;
+  background: #ffffff;
+}
+
+.dayCellToday {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(168, 85, 247, 0.08) 100%
+  );
+}
+
+.dayNumber {
+  text-shadow: none;
+}
+
+.dayNumberToday {
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.dotIndicator {
+  width: 8px;
+  height: 8px;
+}
+
+.taskItem {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  color: #ffffff;
+}
+
+.taskItemCompleted {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
+}
+
+.todayIndicator {
+  background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+}

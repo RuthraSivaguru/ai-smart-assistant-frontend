@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Card } from "primereact/card";
+import styles from "../styles/components/EnterpriseCard.module.css";
 
 interface EnterpriseCardProps {
   title: string;
@@ -18,19 +19,9 @@ export const EnterpriseCard = ({
 }: EnterpriseCardProps) => {
   return (
     <div
-      className="flex align-items-center justify-content-center min-h-screen w-full overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      }}
+      className={`flex align-items-center justify-content-center min-h-screen w-full overflow-hidden ${styles.container}`}
     >
-      <div
-        className="absolute w-full h-full"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0) 50%)",
-          pointerEvents: "none",
-        }}
-      />
+      <div className={`absolute w-full h-full ${styles.backgroundOverlay}`} />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -53,14 +44,7 @@ export const EnterpriseCard = ({
             <div className="text-center text-gray-500 mb-4">{subtitle}</div>
           }
           footer={footer}
-          className={`w-full md:w-30rem border-none ${className}`}
-          style={{
-            background: "rgba(255, 255, 255, 0.75)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-            borderRadius: "24px",
-          }}
+          className={`w-full md:w-30rem border-none ${className} ${styles.card}`}
         >
           {children}
         </Card>

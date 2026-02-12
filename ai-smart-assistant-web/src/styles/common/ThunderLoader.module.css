@@ -1,0 +1,22 @@
+.glowEffect {
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.4) 0%,
+    rgba(168, 85, 247, 0) 70%
+  );
+  filter: blur(20px);
+  transform: translate(-50%, -50%);
+}
+
+.boltContainer {
+  transform: translate(-50%, -50%);
+}
+
+.boltIcon {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+}
+
+.loadingDot {
+  width: 4px;
+  height: 4px;
+}

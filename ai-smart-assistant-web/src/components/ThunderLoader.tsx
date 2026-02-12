@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import styles from "../styles/common/ThunderLoader.module.css";
 
 export const ThunderLoader = () => {
   return (
@@ -15,13 +16,7 @@ export const ThunderLoader = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-50 left-50 -translate-x-50 -translate-y-50 w-8rem h-8rem border-circle"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0) 70%)",
-            filter: "blur(20px)",
-            transform: "translate(-50%, -50%)",
-          }}
+          className={`absolute top-50 left-50 -translate-x-50 -translate-y-50 w-8rem h-8rem border-circle ${styles.glowEffect}`}
         />
 
         {/* Outer Ring */}
@@ -37,8 +32,7 @@ export const ThunderLoader = () => {
 
         {/* Bolt Icon Container */}
         <div
-          className="absolute top-50 left-50 -translate-x-50 -translate-y-50 flex align-items-center justify-content-center"
-          style={{ transform: "translate(-50%, -50%)" }}
+          className={`absolute top-50 left-50 -translate-x-50 -translate-y-50 flex align-items-center justify-content-center ${styles.boltContainer}`}
         >
           <motion.div
             animate={{
@@ -50,10 +44,7 @@ export const ThunderLoader = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-4rem h-4rem bg-primary border-round-xl flex align-items-center justify-content-center shadow-4"
-            style={{
-              background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-            }}
+            className={`w-4rem h-4rem bg-primary border-round-xl flex align-items-center justify-content-center shadow-4 ${styles.boltIcon}`}
           >
             <i className="pi pi-bolt text-white text-4xl"></i>
           </motion.div>
@@ -82,8 +73,7 @@ export const ThunderLoader = () => {
                 repeat: Infinity,
                 delay: i * 0.2,
               }}
-              className="w-4px h-4px border-circle bg-primary"
-              style={{ width: "4px", height: "4px" }}
+              className={`w-4px h-4px border-circle bg-primary ${styles.loadingDot}`}
             />
           ))}
         </div>

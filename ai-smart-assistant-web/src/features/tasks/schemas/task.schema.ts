@@ -12,3 +12,16 @@ export const createTaskSchema = z.object({
 });
 
 export type CreateTask = z.infer<typeof createTaskSchema>;
+
+export const updateTaskSchema = z.object({
+  id: z.string(),
+  title: z.string().min(3, "Title must be at least 3 characters long"),
+  dueDate: z.date(),
+  description: z
+    .string()
+    .min(3, "Description must be at least 3 characters long")
+    .optional(),
+  status: z.enum(["pending", "in_progress", "completed"]).default("pending"),
+});
+
+export type UpdateTask = z.infer<typeof updateTaskSchema>;

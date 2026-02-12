@@ -10,6 +10,7 @@ import Register from "../features/auth/pages/register";
 import Dashboard from "../features/dashboard/pages/dashboard";
 import { MaintenancePage } from "../common/pages/Maintenance";
 import { redirect } from "@tanstack/react-router";
+import styles from "../styles/app/App.module.css";
 
 import { LoadingOverlay } from "../components/LoadingOverlay";
 
@@ -22,7 +23,7 @@ const rootRoute = createRootRoute({
     </>
   ),
   notFoundComponent: () => (
-    <div style={{ padding: "20px" }}>Page Not Found</div>
+    <div className={styles.notFoundContainer}>Page Not Found</div>
   ),
 });
 
@@ -65,6 +66,7 @@ const protectedLayoutRoute = createRoute({
 import TasksPage from "../features/tasks/pages/tasks";
 import CalendarPage from "../features/calendar/pages/calendar";
 import SettingsPage from "../features/settings/pages/settings";
+import AnalyticsPage from "../features/analytics/pages/AnalyticsPage";
 
 const dashboardRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
@@ -84,6 +86,12 @@ const calendarRoute = createRoute({
   component: CalendarPage,
 });
 
+const analyticsRoute = createRoute({
+  getParentRoute: () => protectedLayoutRoute,
+  path: "/analytics",
+  component: AnalyticsPage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/settings",
@@ -94,6 +102,7 @@ protectedLayoutRoute.addChildren([
   dashboardRoute,
   tasksRoute,
   calendarRoute,
+  analyticsRoute,
   settingsRoute,
 ]);
 

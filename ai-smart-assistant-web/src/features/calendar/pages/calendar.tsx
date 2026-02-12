@@ -3,6 +3,7 @@ import { useTasks } from "../../tasks/hooks/useTask";
 import { motion } from "framer-motion";
 import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
+import styles from "../../../styles/features/calendar/Calendar.module.css";
 
 export default function CalendarPage() {
   const { tasks } = useTasks();
@@ -56,115 +57,6 @@ export default function CalendarPage() {
     hidden: { opacity: 0, scale: 0.9, y: 10 },
     show: { opacity: 1, scale: 1, y: 0 },
   };
-
-  const renderGridView = () => (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="grid"
-    >
-      {paddingDays.map((i) => (
-        <div
-          key={`pad-${i}`}
-          className="col h-8rem border-1 border-50 surface-50 opacity-20"
-        ></div>
-      ))}
-      {days.map((day) => {
-        const dayTasks = getTasksForDay(day);
-        const isToday =
-          day === new Date().getDate() &&
-          month === new Date().getMonth() &&
-          year === new Date().getFullYear();
-
-        return (
-          <motion.div
-            key={day}
-            variants={itemVariants}
-            whileHover={{
-              scale: 1.05,
-              zIndex: 10,
-              boxShadow:
-                "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
-            }}
-            className={`col h-9rem border-1 border-100 p-3 relative transition-colors duration-300 cursor-pointer ${
-              isToday
-                ? "bg-primary-50 border-primary-200"
-                : "bg-white hover:bg-white"
-            }`}
-            style={{
-              borderRadius: "12px",
-              backdropFilter: "blur(4px)",
-              background: isToday
-                ? "linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%)"
-                : "rgba(255, 255, 255, 0.8)",
-            }}
-          >
-            <div className="flex justify-content-between align-items-start">
-              <span
-                className={`text-2xl font-black tracking-tighter ${
-                  isToday ? "text-primary" : "text-900"
-                }`}
-                style={{
-                  textShadow: isToday
-                    ? "0 0 15px rgba(99, 102, 241, 0.3)"
-                    : "none",
-                }}
-              >
-                {day}
-              </span>
-              {dayTasks.length > 0 && (
-                <div className="flex gap-1">
-                  <span
-                    className="w-8px h-8px border-circle bg-primary shadow-2 animate-pulse"
-                    style={{ width: "8px", height: "8px" }}
-                  ></span>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-3 flex flex-column gap-2 overflow-hidden">
-              {dayTasks.slice(0, 3).map((task) => (
-                <motion.div
-                  key={task.id}
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="text-xs p-2 border-round-lg font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis transition-all"
-                  style={{
-                    background:
-                      task.status === "completed"
-                        ? "rgba(34, 197, 94, 0.1)"
-                        : "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-                    color: task.status === "completed" ? "#166534" : "#ffffff",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                    border: "1px solid rgba(255,255,255,0.2)",
-                  }}
-                >
-                  {task.title}
-                </motion.div>
-              ))}
-              {dayTasks.length > 3 && (
-                <span className="text-xs text-500 font-bold pl-1 flex align-items-center gap-1">
-                  <i className="pi pi-plus" style={{ fontSize: "0.6rem" }}></i>
-                  {dayTasks.length - 3} others
-                </span>
-              )}
-            </div>
-
-            {isToday && (
-              <div
-                className="absolute bottom-0 left-0 w-full h-4px bg-primary border-round-bottom-lg"
-                style={{
-                  background:
-                    "linear-gradient(90deg, #6366f1 0%, #a855f7 100%)",
-                }}
-              ></div>
-            )}
-          </motion.div>
-        );
-      })}
-    </motion.div>
-  );
 
   const renderListView = () => {
     const scheduledDays = days.filter((d) => getTasksForDay(d).length > 0);
@@ -296,25 +188,9 @@ export default function CalendarPage() {
       </motion.div>
 
       <div
-        className="surface-card p-4 border-round-2xl shadow-1 overflow-hidden"
-        style={{
-          background: "rgba(255, 255, 255, 0.6)",
-          backdropFilter: "blur(10px)",
-        }}
+        className={`surface-card p-4 border-round-2xl shadow-1 overflow-hidden ${styles.calendarContainer}`}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7, 1fr)",
-            textAlign: "center",
-            fontWeight: "bold",
-            color: "#64748b",
-            marginBottom: "1.5rem",
-            textTransform: "uppercase",
-            fontSize: "0.75rem",
-            letterSpacing: "0.15em",
-          }}
-        >
+        <div className={styles.gridHeader}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div key={day} className="py-2">
               {day}
@@ -327,25 +203,10 @@ export default function CalendarPage() {
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(7, 1fr)",
-              gap: "1px",
-              background: "#e2e8f0", // Grid line color
-              border: "1px solid #e2e8f0",
-              borderRadius: "12px",
-              overflow: "hidden",
-            }}
+            className={styles.gridBody}
           >
             {paddingDays.map((i) => (
-              <div
-                key={`pad-${i}`}
-                style={{
-                  height: "9rem",
-                  background: "#f8fafc",
-                  opacity: 0.4,
-                }}
-              ></div>
+              <div key={`pad-${i}`} className={styles.paddingDay}></div>
             ))}
             {days.map((day) => {
               const dayTasks = getTasksForDay(day);
@@ -363,32 +224,20 @@ export default function CalendarPage() {
                     zIndex: 10,
                     boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
                   }}
-                  className="relative p-3 cursor-pointer transition-colors duration-300"
-                  style={{
-                    height: "9rem",
-                    background: isToday
-                      ? "linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%)"
-                      : "#ffffff",
-                  }}
+                  className={`relative p-3 cursor-pointer transition-colors duration-300 ${isToday ? styles.dayCellToday : styles.dayCell}`}
                 >
                   <div className="flex justify-content-between align-items-start">
                     <span
                       className={`text-2xl font-black tracking-tighter ${
                         isToday ? "text-primary" : "text-900"
-                      }`}
-                      style={{
-                        textShadow: isToday
-                          ? "0 0 15px rgba(99, 102, 241, 0.3)"
-                          : "none",
-                      }}
+                      } ${isToday ? styles.dayNumberToday : styles.dayNumber}`}
                     >
                       {day}
                     </span>
                     {dayTasks.length > 0 && (
                       <div className="flex gap-1">
                         <span
-                          className="w-8px h-8px border-circle bg-primary shadow-2 animate-pulse"
-                          style={{ width: "8px", height: "8px" }}
+                          className={`w-8px h-8px border-circle bg-primary shadow-2 animate-pulse ${styles.dotIndicator}`}
                         ></span>
                       </div>
                     )}
@@ -400,15 +249,7 @@ export default function CalendarPage() {
                         key={task.id}
                         initial={{ opacity: 0, x: -5 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="text-xs p-2 border-round-lg font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis"
-                        style={{
-                          background:
-                            task.status === "completed"
-                              ? "rgba(34, 197, 94, 0.1)"
-                              : "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-                          color:
-                            task.status === "completed" ? "#166534" : "#ffffff",
-                        }}
+                        className={`text-xs p-2 border-round-lg font-bold white-space-nowrap overflow-hidden text-overflow-ellipsis ${task.status === "completed" ? styles.taskItemCompleted : styles.taskItem}`}
                       >
                         {task.title}
                       </motion.div>
@@ -422,11 +263,7 @@ export default function CalendarPage() {
 
                   {isToday && (
                     <div
-                      className="absolute bottom-0 left-0 w-full h-4px bg-primary"
-                      style={{
-                        background:
-                          "linear-gradient(90deg, #6366f1 0%, #a855f7 100%)",
-                      }}
+                      className={`absolute bottom-0 left-0 w-full h-4px bg-primary ${styles.todayIndicator}`}
                     ></div>
                   )}
                 </motion.div>

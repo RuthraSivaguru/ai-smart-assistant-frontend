@@ -4,6 +4,7 @@ import { httpClient } from "../../../api/httpClient";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { motion, AnimatePresence } from "framer-motion";
+import styles from "../../../styles/features/tasks/AiTaskInput.module.css";
 
 export function AITaskInput({
   onCreated,
@@ -36,14 +37,10 @@ export function AITaskInput({
       className="p-1"
     >
       <div
-        className="surface-card p-1 shadow-2 border-round-3xl border-1 surface-border relative overflow-hidden group"
-        style={{
-          background: "linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%)",
-        }}
+        className={`surface-card p-1 shadow-2 border-round-3xl border-1 surface-border relative overflow-hidden group ${styles.aiTaskCard}`}
       >
         <div
-          className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-400 via-purple-500 to-pink-500"
-          style={{ background: "linear-gradient(90deg, #4f46e5, #ec4899)" }}
+          className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-400 via-purple-500 to-pink-500 ${styles.topBarGradient}`}
         ></div>
 
         <div className="p-4 md:p-5">
@@ -56,13 +53,7 @@ export function AITaskInput({
                 <i className="pi pi-sparkles text-xl text-purple-600"></i>
               </motion.div>
               <span
-                className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(to right, #9333ea, #db2777)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
+                className={`text-lg bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 ${styles.neuraTextGradient}`}
               >
                 Neura AI
               </span>
@@ -75,13 +66,7 @@ export function AITaskInput({
                 rows={1}
                 autoResize
                 placeholder="✨ Describe your task... (e.g., 'Draft a report for Friday')"
-                className="w-full text-lg p-3 border-round-2xl bg-white-alpha-50 border-none shadow-inner focus:shadow-sm transition-all"
-                style={{
-                  minHeight: "80px",
-                  paddingRight: "120px",
-                  resize: "none",
-                  background: "#f8fafc",
-                }}
+                className={`w-full text-lg p-3 border-round-2xl bg-white-alpha-50 border-none shadow-inner focus:shadow-sm transition-all ${styles.taskInput}`}
                 disabled={loading}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -104,16 +89,8 @@ export function AITaskInput({
                     onClick={submit}
                     className={
                       !!input.trim()
-                        ? "bg-gradient-to-r from-purple-600 to-pink-600 border-none"
+                        ? `bg-gradient-to-r from-purple-600 to-pink-600 border-none ${styles.submitButtonActive}`
                         : "text-gray-400"
-                    }
-                    style={
-                      !!input.trim()
-                        ? {
-                            background:
-                              "linear-gradient(135deg, #9333ea 0%, #db2777 100%)",
-                          }
-                        : {}
                     }
                     aria-label="Create Task"
                   />

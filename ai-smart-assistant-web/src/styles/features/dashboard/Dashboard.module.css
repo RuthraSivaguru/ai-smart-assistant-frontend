@@ -1,0 +1,20 @@
+.headerGradient {
+  background: linear-gradient(to right, #1e293b, #4f46e5);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.newTaskButton {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+  border: none !important;
+}
+
+.statsCard {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.statsIconContainer {
+  width: 3.5rem;
+  height: 3.5rem;
+}

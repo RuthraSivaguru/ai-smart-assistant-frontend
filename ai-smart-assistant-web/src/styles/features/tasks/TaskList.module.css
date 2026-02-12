@@ -1,0 +1,53 @@
+.statusTag {
+  letter-spacing: 0.05em;
+}
+
+.titleDescription {
+  max-width: 250px;
+}
+
+.tableContainer {
+  min-width: 50rem;
+}
+
+.colTaskInfo {
+  width: 40%;
+}
+
+.colDueDate {
+  width: 20%;
+}
+
+.colStatus {
+  width: 20%;
+}
+
+.colActions {
+  width: 20%;
+  text-align: center;
+}
+
+.dataTable :global(.p-datatable-thead > tr > th) {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 1.25rem 1rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.dataTable :global(.p-datatable-tbody > tr) {
+  transition: all 0.2s;
+}
+
+.dataTable :global(.p-datatable-tbody > tr:hover) {
+  background: #f1f5f9 !important;
+  transform: scale(1.002);
+}
+
+.dataTable :global(.p-datatable-tbody > tr > td) {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}

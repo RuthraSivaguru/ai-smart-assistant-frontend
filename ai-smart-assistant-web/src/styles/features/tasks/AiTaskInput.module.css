@@ -1,0 +1,25 @@
+.aiTaskCard {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+}
+
+.topBarGradient {
+  background: linear-gradient(90deg, #4f46e5, #ec4899);
+}
+
+.neuraTextGradient {
+  background-image: linear-gradient(to right, #9333ea, #db2777);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.taskInput {
+  min-height: 80px;
+  padding-right: 120px;
+  resize: none;
+  background: #f8fafc;
+}
+
+.submitButtonActive {
+  background: linear-gradient(135deg, #9333ea 0%, #db2777 100%);
+}

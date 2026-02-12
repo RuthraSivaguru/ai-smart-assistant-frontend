@@ -4,6 +4,7 @@ import { Sidebar as DesktopSidebar } from "../../components/Sidebar";
 import { Sidebar as MobileSidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { motion } from "framer-motion";
+import styles from "../../styles/common/DashboardLayout.module.css";
 
 export const DashboardLayout = () => {
   const [mobileVisible, setMobileVisible] = useState(false);
@@ -36,10 +37,7 @@ export const DashboardLayout = () => {
       <div className="flex md:hidden align-items-center justify-content-between p-3 surface-card border-bottom-1 surface-border sticky top-0 z-5 bg-white-alpha-90 backdrop-blur-md">
         <div className="flex align-items-center gap-2">
           <div
-            className="bg-primary border-round-lg p-2 flex align-items-center justify-content-center"
-            style={{
-              background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-            }}
+            className={`bg-primary border-round-lg p-2 flex align-items-center justify-content-center ${styles.mobileHeaderIcon}`}
           >
             <i className="pi pi-bolt text-white text-lg"></i>
           </div>

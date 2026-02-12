@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "../store/auth.store";
 import { Button } from "primereact/button";
 import { useLocation, useNavigate } from "@tanstack/react-router";
+import styles from "../styles/common/Sidebar.module.css";
 
 interface SidebarProps {
   isMobile?: boolean;
@@ -57,11 +58,7 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
       initial="expanded"
       animate={isCollapsed ? "collapsed" : "expanded"}
       variants={sidebarVariants}
-      className={`flex flex-column ${isMobile ? "h-full" : "h-screen sticky top-0 left-0"} bg-white z-5 shadow-2`}
-      style={{
-        background: "rgba(255, 255, 255, 0.95)",
-        backdropFilter: "blur(10px)",
-      }}
+      className={`flex flex-column ${isMobile ? "h-full" : "h-screen sticky top-0 left-0"} bg-white z-5 shadow-2 ${styles.sidebar}`}
     >
       {/* Logo Section */}
       <div className={`p-4 flex align-items-center justify-content-between`}>
@@ -74,11 +71,7 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
               className="flex align-items-center gap-2"
             >
               <div
-                className="bg-primary border-round-lg p-2 flex align-items-center justify-content-center"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-                }}
+                className={`bg-primary border-round-lg p-2 flex align-items-center justify-content-center ${styles.logoIcon}`}
               >
                 <i className="pi pi-bolt text-white text-xl"></i>
               </div>

@@ -1,13 +1,28 @@
+import { useState } from "react";
 import { useTasks } from "../hooks/useTask";
 import { TaskList } from "../components/TaskList";
 import { motion } from "framer-motion";
-import { Button } from "primereact/button";
+import { CustomButton } from "../../../components/CustomButton";
+import { AiTaskDialog } from "../components/AiTaskDialog";
+import { TaskDialog } from "../components/TaskDialog";
+import type { CreateTask } from "../schemas/task.schema";
+import styles from "../../../styles/features/tasks/TasksPage.module.css";
 
 export default function TasksPage() {
-  const { tasks, loading, loadTasks } = useTasks();
+  const { tasks, loading, loadTasks, updateTask } = useTasks();
+  const [showAiDialog, setShowAiDialog] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<CreateTask | undefined>(
+    undefined,
+  );
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
+  const handleEdit = (task: CreateTask) => {
+    setSelectedTask(task);
+    setShowEditDialog(true);
+  };
 
   return (
-    <div className="p-4">
+    <div className="">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -20,7 +35,7 @@ export default function TasksPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button
+          <CustomButton
             label="Refresh"
             icon="pi pi-refresh"
             text
@@ -28,17 +43,27 @@ export default function TasksPage() {
             loading={loading}
             onClick={loadTasks}
           />
-          <Button
-            label="Create New Task"
-            icon="pi pi-plus"
-            className="p-button-raised transition-all transition-duration-200"
-            style={{
-              background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-              border: "none",
-            }}
+          <CustomButton
+            label="Generate New Task"
+            icon="pi pi-sparkles"
+            className={`p-button-raised transition-all transition-duration-200 ${styles.newTaskButton}`}
+            onClick={() => setShowAiDialog(true)}
           />
         </div>
       </motion.div>
+
+      <AiTaskDialog
+        visible={showAiDialog}
+        onHide={() => setShowAiDialog(false)}
+        onSuccess={() => loadTasks()}
+      />
+
+      <TaskDialog
+        visible={showEditDialog}
+        onHide={() => setShowEditDialog(false)}
+        task={selectedTask}
+        onSave={updateTask}
+      />
 
       <div className="surface-card p-4 border-round-2xl shadow-1">
         {loading ? (
@@ -49,7 +74,7 @@ export default function TasksPage() {
             </span>
           </div>
         ) : (
-          <TaskList tasks={tasks} />
+          <TaskList tasks={tasks} onEdit={handleEdit} />
         )}
       </div>
     </div>

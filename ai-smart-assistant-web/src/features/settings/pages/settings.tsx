@@ -5,11 +5,12 @@ import { Card } from "primereact/card";
 import { Avatar } from "primereact/avatar";
 import { Tag } from "primereact/tag";
 import { Divider } from "primereact/divider";
+import styles from "../../../styles/features/settings/Settings.module.css";
 
 export default function SettingsPage() {
   const user = {
-    name: "Current User",
-    email: "user@example.com",
+    name: "Ruthra",
+    email: "ruthra@gmail.com",
     plan: "Free Plan",
     joined: "January 2026",
   };
@@ -31,7 +32,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="p-4 lg:p-6 max-w-5xl mx-auto">
+    <div className="p-2 lg:p-6 max-w-5xl mx-auto ">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -56,12 +57,7 @@ export default function SettingsPage() {
                     icon="pi pi-user"
                     size="xlarge"
                     shape="circle"
-                    className="bg-primary-100 text-primary p-4"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      fontSize: "3rem",
-                    }}
+                    className={`bg-primary-100 text-primary p-4 ${styles.profileAvatar}`}
                   />
                 </div>
                 <h2 className="text-2xl font-bold text-900 mb-1">
