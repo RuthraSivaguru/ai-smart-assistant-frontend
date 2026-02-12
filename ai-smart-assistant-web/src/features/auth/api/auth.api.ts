@@ -4,6 +4,7 @@ import type {
   LoginResponse,
   RegisterPayload,
   RegisterResponse,
+  DeleteUserResponse,
 } from "../types/auth.types";
 
 export const loginApi = (data: LoginPayload): Promise<LoginResponse> => {
@@ -14,4 +15,8 @@ export const registerApi = (
   data: RegisterPayload,
 ): Promise<RegisterResponse> => {
   return httpClient.post("/auth/register", data);
+};
+
+export const deleteUserApi = (id: string): Promise<DeleteUserResponse> => {
+  return httpClient.delete(`/auth/delete-user/${id}`);
 };

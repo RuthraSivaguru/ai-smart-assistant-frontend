@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Card } from "primereact/card";
 import styles from "../styles/components/EnterpriseCard.module.css";
 
@@ -17,37 +17,70 @@ export const EnterpriseCard = ({
   footer,
   className = "",
 }: EnterpriseCardProps) => {
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  };
+
   return (
     <div
-      className={`flex align-items-center justify-content-center min-h-screen w-full overflow-hidden ${styles.container}`}
+      className={`flex align-items-center justify-content-center min-h-screen w-full overflow-hidden relative ${styles.container}`}
     >
       <div className={`absolute w-full h-full ${styles.backgroundOverlay}`} />
+      <div className={styles.shape + " " + styles.shape1} />
+      <div className={styles.shape + " " + styles.shape2} />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{
-          duration: 0.6,
-          ease: [0.22, 1, 0.36, 1],
-          type: "spring",
-          stiffness: 100,
-        }}
-        className="z-1 px-3"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="z-1 px-3 w-full flex justify-content-center"
       >
-        <Card
-          title={
-            <div className="text-center mb-2">
-              <span className="text-3xl font-bold text-gray-900">{title}</span>
-            </div>
-          }
-          subTitle={
-            <div className="text-center text-gray-500 mb-4">{subtitle}</div>
-          }
-          footer={footer}
-          className={`w-full md:w-30rem border-none ${className} ${styles.card}`}
-        >
-          {children}
-        </Card>
+        <motion.div variants={itemVariants} className="w-full md:w-30rem">
+          <Card
+            title={
+              <motion.div variants={itemVariants} className="text-center mb-4">
+                <span className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent block mb-2">
+                  {title}
+                </span>
+                {subtitle && (
+                  <span className="text-gray-500 font-medium text-lg block">
+                    {subtitle}
+                  </span>
+                )}
+              </motion.div>
+            }
+            footer={
+              footer && (
+                <motion.div variants={itemVariants} className="mt-4">
+                  {footer}
+                </motion.div>
+              )
+            }
+            className={`border-none ${className} ${styles.card}`}
+          >
+            <motion.div variants={itemVariants}>{children}</motion.div>
+          </Card>
+        </motion.div>
       </motion.div>
     </div>
   );

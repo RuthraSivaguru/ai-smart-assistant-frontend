@@ -13,3 +13,7 @@ export interface RegisterResponse {
   message: string;
   userId: string;
 }
+
+export interface DeleteUserResponse {
+  message: string;
+}
