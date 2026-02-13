@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useTasks } from "../hooks/useTask";
+import { useTaskStore } from "../../../store/task.store";
+import { useTasks } from "../hooks/useTasks";
 import { TaskList } from "../components/TaskList";
 import { motion } from "framer-motion";
 import { CustomButton } from "../../../components/CustomButton";
@@ -7,14 +7,23 @@ import { AiTaskDialog } from "../components/AiTaskDialog";
 import { TaskDialog } from "../components/TaskDialog";
 import type { CreateTask } from "../schemas/task.schema";
 import styles from "../../../styles/features/tasks/TasksPage.module.css";
+import { useEffect } from "react";
 
 export default function TasksPage() {
-  const { tasks, loading, loadTasks, updateTask } = useTasks();
-  const [showAiDialog, setShowAiDialog] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<CreateTask | undefined>(
-    undefined,
-  );
-  const [showEditDialog, setShowEditDialog] = useState(false);
+  const { tasks, loading, loadTasks, updateTask, deleteTask } = useTasks();
+
+  const {
+    showAiDialog,
+    setShowAiDialog,
+    showEditDialog,
+    setShowEditDialog,
+    selectedTask,
+    setSelectedTask,
+  } = useTaskStore();
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   const handleEdit = (task: CreateTask) => {
     setSelectedTask(task);
@@ -22,7 +31,7 @@ export default function TasksPage() {
   };
 
   return (
-    <div className="">
+    <div className="flex flex-column gap-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -74,7 +83,7 @@ export default function TasksPage() {
             </span>
           </div>
         ) : (
-          <TaskList tasks={tasks} onEdit={handleEdit} />
+          <TaskList tasks={tasks} onEdit={handleEdit} onDelete={deleteTask} />
         )}
       </div>
     </div>

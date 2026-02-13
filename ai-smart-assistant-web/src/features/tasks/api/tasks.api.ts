@@ -21,8 +21,12 @@ export const updateTask = async (
   id: string,
   task: Partial<UpdateTask>,
 ): Promise<UpdateTask> => {
-  return (await httpClient.patch(
+  return (await httpClient.put(
     `/tasks/update/${id}`,
     task,
   )) as unknown as UpdateTask;
+};
+
+export const deleteTask = async (id: string): Promise<void> => {
+  await httpClient.delete(`/tasks/delete/${id}`);
 };

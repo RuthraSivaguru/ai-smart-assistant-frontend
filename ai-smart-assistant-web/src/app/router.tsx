@@ -5,6 +5,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import { Protected } from "../components/protectedRoute";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import Login from "../features/auth/pages/login";
 import Register from "../features/auth/pages/register";
 import Dashboard from "../features/dashboard/pages/dashboard";
@@ -19,6 +20,7 @@ const rootRoute = createRootRoute({
   component: () => (
     <>
       <LoadingOverlay />
+      <ConfirmDialog />
       <Outlet />
     </>
   ),
@@ -66,7 +68,6 @@ const protectedLayoutRoute = createRoute({
 import TasksPage from "../features/tasks/pages/tasks";
 import CalendarPage from "../features/calendar/pages/calendar";
 import SettingsPage from "../features/settings/pages/settings";
-import AnalyticsPage from "../features/analytics/pages/AnalyticsPage";
 
 const dashboardRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
@@ -86,12 +87,6 @@ const calendarRoute = createRoute({
   component: CalendarPage,
 });
 
-const analyticsRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/analytics",
-  component: AnalyticsPage,
-});
-
 const settingsRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/settings",
@@ -102,7 +97,6 @@ protectedLayoutRoute.addChildren([
   dashboardRoute,
   tasksRoute,
   calendarRoute,
-  analyticsRoute,
   settingsRoute,
 ]);
 

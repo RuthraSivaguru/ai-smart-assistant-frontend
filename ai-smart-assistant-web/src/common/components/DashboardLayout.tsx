@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useUiStore } from "../../store/ui.store";
 import { Outlet } from "@tanstack/react-router";
 import { Sidebar as DesktopSidebar } from "../../components/Sidebar";
 import { Sidebar as MobileSidebar } from "primereact/sidebar";
@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import styles from "../../styles/common/DashboardLayout.module.css";
 
 export const DashboardLayout = () => {
-  const [mobileVisible, setMobileVisible] = useState(false);
+  const { mobileSidebarVisible, setMobileSidebarVisible } = useUiStore();
 
   return (
     <div className="flex h-screen bg-slate-50 relative overflow-hidden flex-column md:flex-row">
@@ -49,21 +49,21 @@ export const DashboardLayout = () => {
           icon="pi pi-bars"
           text
           rounded
-          onClick={() => setMobileVisible(true)}
+          onClick={() => setMobileSidebarVisible(true)}
           className="text-700"
         />
       </div>
 
       {/* Mobile Drawer */}
       <MobileSidebar
-        visible={mobileVisible}
-        onHide={() => setMobileVisible(false)}
+        visible={mobileSidebarVisible}
+        onHide={() => setMobileSidebarVisible(false)}
         className="w-full sm:w-20rem p-0"
         showCloseIcon={false}
       >
         <DesktopSidebar
           isMobile
-          onMobileClose={() => setMobileVisible(false)}
+          onMobileClose={() => setMobileSidebarVisible(false)}
         />
       </MobileSidebar>
 
@@ -72,7 +72,7 @@ export const DashboardLayout = () => {
         <DesktopSidebar />
       </div>
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-6">
         <Outlet />
       </main>
     </div>

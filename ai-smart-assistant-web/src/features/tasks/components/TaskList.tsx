@@ -1,6 +1,7 @@
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Tag } from "primereact/tag";
+import { confirmDialog } from "primereact/confirmdialog";
 import { CustomButton } from "../../../components/CustomButton";
 import { motion } from "framer-motion";
 import type { CreateTask } from "../schemas/task.schema";
@@ -9,9 +10,11 @@ import styles from "../../../styles/features/tasks/TaskList.module.css";
 export function TaskList({
   tasks,
   onEdit,
+  onDelete,
 }: {
   tasks: CreateTask[];
   onEdit: (task: CreateTask) => void;
+  onDelete: (id: string) => void;
 }) {
   const statusBodyTemplate = (rowData: CreateTask) => {
     const config: Record<
@@ -22,7 +25,7 @@ export function TaskList({
       }
     > = {
       completed: { severity: "success", icon: "pi pi-check-circle" },
-      in_progress: { severity: "warning", icon: "pi pi-sync pi-spin" },
+      in_progress: { severity: "warning", icon: "pi pi-sync" },
       pending: { severity: "danger", icon: "pi pi-clock" },
       default: { severity: "info", icon: "pi pi-info-circle" },
     };
@@ -34,7 +37,7 @@ export function TaskList({
         value={rowData.status.replace("_", " ")}
         severity={severity}
         rounded
-        className={`px-3 font-bold uppercase text-xs ${styles.statusTag}`}
+        className={`px-3 font-semibold uppercase text-[12px] ${styles.statusTag}`}
         icon={icon}
       />
     );
@@ -57,6 +60,17 @@ export function TaskList({
           text
           severity="danger"
           size="small"
+          onClick={() => {
+            if (rowData.id) {
+              confirmDialog({
+                message: `Are you sure you want to delete "${rowData.title}"?`,
+                header: "Confirm Deletion",
+                icon: "pi pi-exclamation-triangle",
+                acceptClassName: "p-button-danger",
+                accept: () => onDelete(rowData.id!),
+              });
+            }
+          }}
         />
       </div>
     );
@@ -106,10 +120,9 @@ export function TaskList({
     >
       <DataTable
         value={tasks}
-        rows={5}
-        paginator={tasks.length > 5}
+        rows={10}
+        paginator={tasks.length > 10}
         emptyMessage="No tasks found. Start by creating one!"
-        responsiveLayout="stack"
         breakpoint="960px"
         stripedRows
         size="large"

@@ -1,18 +1,7 @@
 import { create } from "zustand";
 
-export interface ToastMessage {
-  severity: "success" | "info" | "warn" | "error";
-  summary: string;
-  detail?: string;
-  life?: number;
-}
+// Store is now empty as logic moved to useToast hook
+// Keeping it if we need global toast state later, otherwise could be deleted
+interface ToastState {}
 
-interface ToastState {
-  toast: ToastMessage | null;
-  showToast: (message: ToastMessage) => void;
-}
-
-export const useToastStore = create<ToastState>((set) => ({
-  toast: null,
-  showToast: (message) => set({ toast: message }),
-}));
+export const useToastStore = create<ToastState>(() => ({}));

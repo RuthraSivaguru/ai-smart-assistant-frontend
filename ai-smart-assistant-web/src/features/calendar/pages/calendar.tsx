@@ -1,21 +1,24 @@
-import { useState } from "react";
-import { useTasks } from "../../tasks/hooks/useTask";
+import { useCalendarStore } from "../../../store/calendar.store";
+import { useCalendar } from "../hooks/useCalendar";
+import { useTasks } from "../../tasks/hooks/useTasks";
 import { motion } from "framer-motion";
 import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
 import styles from "../../../styles/features/calendar/Calendar.module.css";
+import { useEffect } from "react";
 
 export default function CalendarPage() {
-  const { tasks } = useTasks();
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewType, setViewType] = useState<"grid" | "list">("list");
+  const { tasks, loadTasks } = useTasks();
+  const { currentDate, viewType, setViewType } = useCalendarStore();
+  const { prevMonth, nextMonth } = useCalendar();
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const monthName = currentDate.toLocaleString("default", { month: "long" });
-
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
   const getTasksForDay = (day: number) => {
     return tasks.filter((task) => {

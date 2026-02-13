@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { registerApi } from "../api/auth.api";
+import { useAuth } from "../hooks/useAuth";
 import { RegisterSchema } from "../schemas/register.schema";
 import { EnterpriseCard } from "../../../components/EnterpriseCard";
 import { InputText } from "primereact/inputtext";
@@ -7,37 +6,21 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { useNavigate } from "@tanstack/react-router";
 import { motion, type Variants } from "framer-motion";
+import { useAuthStore } from "../../../store/auth.store";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    address: "",
-    phoneNumber: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-  const [loading, setLoading] = useState(false);
+  const { handleRegister: registerAction } = useAuth();
+  const form = useAuthStore((s) => s.registerForm);
+  const setForm = useAuthStore((s) => s.setRegisterForm);
+  const loading = useAuthStore((s) => s.registerLoading);
 
   const submit = async () => {
     const parsed = RegisterSchema.safeParse(form);
-    console.log(parsed);
     if (!parsed.success) {
       return alert("Invalid input");
     }
-
-    setLoading(true);
-    try {
-      await registerApi(form);
-      alert("Registration successful");
-      navigate({ to: "/login" });
-    } catch (err) {
-      alert("Registration failed");
-    } finally {
-      setLoading(false);
-    }
+    await registerAction();
   };
 
   const itemVariants: Variants = {

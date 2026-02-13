@@ -1,16 +1,16 @@
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { useState } from "react";
+import { useUiStore } from "../../store/ui.store";
 import { useToastStore } from "../../store/toast.store";
 import { useRouter } from "@tanstack/react-router";
 
 export const MaintenancePage = () => {
-  const [loading, setLoading] = useState(false);
+  const { maintenanceLoading, setMaintenanceLoading } = useUiStore();
   const { showToast } = useToastStore();
   const router = useRouter();
 
   const handleRefresh = async () => {
-    setLoading(true);
+    setMaintenanceLoading(true);
     try {
       // Try to reach the backend
       await fetch("http://localhost:3000");
@@ -27,7 +27,7 @@ export const MaintenancePage = () => {
         detail: "Backend is still unreachable. Please try again later.",
       });
     } finally {
-      setLoading(false);
+      setMaintenanceLoading(false);
     }
   };
 
@@ -45,7 +45,7 @@ export const MaintenancePage = () => {
         <Button
           label="Refresh Page"
           icon="pi pi-refresh"
-          loading={loading}
+          loading={maintenanceLoading}
           onClick={handleRefresh}
         />
       </Card>

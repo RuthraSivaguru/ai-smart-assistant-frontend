@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuthStore } from "../store/auth.store";
 import { Button } from "primereact/button";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import styles from "../styles/common/Sidebar.module.css";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import { useUi } from "../common/hooks/useUi";
 
 interface SidebarProps {
   isMobile?: boolean;
@@ -11,18 +11,14 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isSidebarCollapsed, toggleSidebar } = useUi();
+  const { handleLogout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const logout = useAuthStore((s) => s.logout);
-  const setIsAuthenticating = useAuthStore((s) => s.setIsAuthenticating);
 
-  const handleLogout = () => {
-    setIsAuthenticating(true);
-    // Add a small delay for the animation to be visible
-    setTimeout(() => {
-      logout();
-    }, 1000);
+  const handleLogoutAction = async () => {
+    // We can directly call handleLogout from the hook
+    await handleLogout();
   };
 
   const menuItems = [
@@ -39,12 +35,6 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
       id: "calendar",
       path: "/calendar",
     },
-    {
-      icon: "pi-chart-bar",
-      label: "Analytics",
-      id: "analytics",
-      path: "/analytics",
-    },
     { icon: "pi-cog", label: "Settings", id: "settings", path: "/settings" },
   ];
 
@@ -56,14 +46,14 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
   return (
     <motion.div
       initial="expanded"
-      animate={isCollapsed ? "collapsed" : "expanded"}
+      animate={isSidebarCollapsed ? "collapsed" : "expanded"}
       variants={sidebarVariants}
       className={`flex flex-column ${isMobile ? "h-full" : "h-screen sticky top-0 left-0"} bg-white z-5 shadow-2 ${styles.sidebar}`}
     >
       {/* Logo Section */}
       <div className={`p-4 flex align-items-center justify-content-between`}>
         <AnimatePresence mode="wait">
-          {(!isCollapsed || isMobile) && (
+          {(!isSidebarCollapsed || isMobile) && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -92,10 +82,12 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
           />
         ) : (
           <Button
-            icon={isCollapsed ? "pi pi-chevron-right" : "pi pi-chevron-left"}
+            icon={
+              isSidebarCollapsed ? "pi pi-chevron-right" : "pi pi-chevron-left"
+            }
             text
             rounded
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={toggleSidebar}
             className="text-400"
           />
         )}
@@ -104,12 +96,12 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
       {/* Profile Section */}
       <div className="px-3 mb-4">
         <div
-          className={`flex align-items-center gap-3 p-3 border-round-xl bg-primary-50 transition-all duration-300 ${isCollapsed ? "justify-content-center" : ""}`}
+          className={`flex align-items-center gap-3 p-3 border-round-xl bg-primary-50 transition-all duration-300 ${isSidebarCollapsed ? "justify-content-center" : ""}`}
         >
           <div className="w-3rem h-3rem border-circle bg-primary-200 flex align-items-center justify-content-center flex-shrink-0">
             <i className="pi pi-user text-primary text-xl"></i>
           </div>
-          {!isCollapsed && (
+          {!isSidebarCollapsed && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -141,7 +133,7 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
               onClick={() => navigate({ to: item.path as any })}
             >
               <i className={`pi ${item.icon} text-lg`}></i>
-              {!isCollapsed && (
+              {!isSidebarCollapsed && (
                 <span className="font-semibold text-sm">{item.label}</span>
               )}
             </motion.div>
@@ -152,12 +144,12 @@ export const Sidebar = ({ isMobile, onMobileClose }: SidebarProps) => {
       {/* Bottom Actions */}
       <div className="p-3">
         <Button
-          label={isCollapsed ? "" : "Logout"}
+          label={isSidebarCollapsed ? "" : "Logout"}
           icon="pi pi-power-off"
           severity="danger"
           text
-          className={`w-full ${isCollapsed ? "flex justify-content-center" : "justify-content-start"} font-semibold`}
-          onClick={handleLogout}
+          className={`w-full ${isSidebarCollapsed ? "flex justify-content-center" : "justify-content-start"} font-semibold`}
+          onClick={handleLogoutAction}
         />
       </div>
     </motion.div>

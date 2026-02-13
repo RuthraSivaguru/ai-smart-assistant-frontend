@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useTaskStore } from "../../../store/task.store";
+import { useTasks } from "../hooks/useTasks";
 import type { CreateTask } from "../schemas/task.schema";
-import { httpClient } from "../../../api/httpClient";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,17 +11,21 @@ export function AITaskInput({
 }: {
   onCreated: (task?: CreateTask) => void;
 }) {
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const input = useTaskStore((s) => s.aiTaskInputText);
+  const setInput = useTaskStore((s) => s.setAiTaskInputText);
+  const loading = useTaskStore((s) => s.loading);
+  const setLoading = useTaskStore((s) => s.setLoading);
+
+  const { addLocalTask } = useTasks();
 
   const submit = async () => {
     if (!input.trim()) return;
 
     setLoading(true);
     try {
-      const res = await httpClient.post("/tasks/ai", { input });
+      await addLocalTask({ title: input } as any);
       setInput("");
-      onCreated(res.data);
+      onCreated();
     } catch (error) {
       console.error("Failed to create AI task", error);
     } finally {

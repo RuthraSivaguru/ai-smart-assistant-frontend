@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useTaskStore } from "../../../store/task.store";
 import { Dialog } from "primereact/dialog";
 import { CustomInput } from "../../../components/CustomInput";
 import { CustomTextarea } from "../../../components/CustomTextarea";
@@ -15,22 +15,8 @@ interface TaskDialogProps {
 }
 
 export function TaskDialog({ visible, onHide, task, onSave }: TaskDialogProps) {
-  const [formData, setFormData] = useState<Partial<CreateTask>>({});
-
-  useEffect(() => {
-    if (task) {
-      setFormData({
-        ...task,
-        dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-      });
-    } else {
-      setFormData({});
-    }
-  }, [task, visible]);
-
-  const handleChange = (key: keyof CreateTask, value: any) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
+  const formData = useTaskStore((s) => s.editTaskFormData);
+  const handleChange = useTaskStore((s) => s.updateEditTaskFormField);
 
   const handleSave = () => {
     if (task?.id) {

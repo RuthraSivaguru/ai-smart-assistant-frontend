@@ -3,46 +3,29 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
 import { Avatar } from "primereact/avatar";
+import { confirmDialog } from "primereact/confirmdialog";
 import { Tag } from "primereact/tag";
 import { Divider } from "primereact/divider";
 import styles from "../../../styles/features/settings/Settings.module.css";
-import { useState, useEffect, useRef } from "react";
+import { useSettingsStore } from "../../../store/settings.store";
+import { useSettings } from "../hooks/useSettings";
 import { useAuthStore } from "../../../store/auth.store";
+import { useEffect, useRef } from "react";
 import { deleteUserApi } from "../../auth/api/auth.api";
-import { getProfileApi } from "../api/settings.api";
-import type { ProfileResponse } from "../types/settings.types";
 import { useNavigate } from "@tanstack/react-router";
-// import { jwtDecode } from "jwt-decode"; // Removed unused import if not needed for delete logic anymore or kept if needed
 import { jwtDecode } from "jwt-decode";
 import { Toast } from "primereact/toast";
 
 export default function SettingsPage() {
-  const [user, setUser] = useState<ProfileResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, deleteLoading, setDeleteLoading } = useSettingsStore();
+  const { fetchProfile } = useSettings();
 
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const token = useAuthStore((state) => state.token);
-  const [deleteLoading, setDeleteLoading] = useState(false);
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const data = await getProfileApi();
-        setUser(data);
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to load profile data",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProfile();
   }, []);
 
@@ -64,42 +47,46 @@ export default function SettingsPage() {
 
   const handleDeleteUser = async () => {
     if (!token) return;
-    try {
-      setDeleteLoading(true);
-      const decoded: any = jwtDecode(token);
-      const userId = decoded.sub;
-      console.log(token);
-      console.log(decoded);
-      console.log(userId);
 
-      if (!userId) {
-        throw new Error("User ID not found in token");
-      }
+    confirmDialog({
+      message:
+        "Are you sure you want to delete your account? This action is permanent and cannot be undone.",
+      header: "Confirm Account Deletion",
+      icon: "pi pi-exclamation-danger",
+      acceptClassName: "p-button-danger",
+      accept: async () => {
+        try {
+          setDeleteLoading(true);
+          const decoded: any = jwtDecode(token);
+          const userId = decoded.sub;
 
-      await deleteUserApi(userId);
-      toast.current?.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Account deleted successfully",
-      });
+          if (!userId) {
+            throw new Error("User ID not found in token");
+          }
 
-      // Add a small delay for the user to see the success message/loading state
-      setTimeout(() => {
-        logout();
-        navigate({ to: "/login" });
-      }, 1000);
-    } catch (error) {
-      console.error("Failed to delete user:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Failed to delete account. Please try again.",
-      });
-    } finally {
-      // Only stop loading if we didn't succeed (success navigates away)
-      // actually, keeping it loading until navigation is better UX
-      // setDeleteLoading(false);
-    }
+          await deleteUserApi(userId);
+          toast.current?.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Account deleted successfully",
+          });
+
+          // Add a small delay for the user to see the success message/loading state
+          setTimeout(() => {
+            logout();
+            navigate({ to: "/login" });
+          }, 1000);
+        } catch (error) {
+          console.error("Failed to delete user:", error);
+          toast.current?.show({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to delete account. Please try again.",
+          });
+          setDeleteLoading(false);
+        }
+      },
+    });
   };
 
   if (loading) {
@@ -166,7 +153,7 @@ export default function SettingsPage() {
                     </span>
                   </div>
                   <div className="flex justify-content-between text-sm">
-                    <span className="text-500">Phone Number</span>
+                    <span className="text-500">Phone</span>
                     <span className="text-900 font-semibold">
                       {user.phoneNumber}
                     </span>
@@ -250,6 +237,7 @@ export default function SettingsPage() {
                         label="Update Profile"
                         icon="pi pi-check"
                         className="p-button-raised border-round-xl px-3 py-2 text-sm"
+                        // onClick={handleUpdateProfile}
                       />
                     </div>
                   </div>

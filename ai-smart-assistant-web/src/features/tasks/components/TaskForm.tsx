@@ -1,23 +1,23 @@
-import { useState } from "react";
+import { useTaskStore } from "../../../store/task.store";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
 export function TaskForm({ onAdd }: { onAdd: (title: string) => void }) {
-  const [title, setTitle] = useState("");
+  const { taskFormTitle, setTaskFormTitle } = useTaskStore();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    onAdd(title);
-    setTitle("");
+    if (!taskFormTitle.trim()) return;
+    onAdd(taskFormTitle);
+    setTaskFormTitle("");
   };
 
   return (
     <form onSubmit={submit} className="flex gap-2">
       <InputText
         placeholder="Add a new task..."
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={taskFormTitle}
+        onChange={(e) => setTaskFormTitle(e.target.value)}
         className="w-full"
       />
       <Button icon="pi pi-plus" type="submit" label="Add" />
