@@ -5,6 +5,8 @@ export const getProfileApi = (): Promise<ProfileResponse> => {
   return httpClient.get("/profile");
 };
 
-export const updateProfileApi = (profile: ProfileResponse): Promise<void> => {
+export const updateProfileApi = (
+  profile: ProfileResponse,
+): Promise<ProfileResponse> => {
   return httpClient.put("/profile/update", profile);
 };

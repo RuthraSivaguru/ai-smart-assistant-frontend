@@ -15,15 +15,63 @@ import { deleteUserApi } from "../../auth/api/auth.api";
 import { useNavigate } from "@tanstack/react-router";
 import { jwtDecode } from "jwt-decode";
 import { Toast } from "primereact/toast";
+import { useState } from "react";
+import type { ProfileResponse } from "../types/settings.types";
 
 export default function SettingsPage() {
   const { user, loading, deleteLoading, setDeleteLoading } = useSettingsStore();
-  const { fetchProfile } = useSettings();
+  const { fetchProfile, updateProfile } = useSettings();
 
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const token = useAuthStore((state) => state.token);
   const toast = useRef<Toast>(null);
+
+  const [formData, setFormData] = useState<Partial<ProfileResponse>>({
+    name: "",
+    phoneNumber: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        phoneNumber: user.phoneNumber || "",
+        address: user.address || "",
+      });
+    }
+  }, [user]);
+
+  const handleUpdateProfile = async () => {
+    if (!user) return;
+    try {
+      const updatedUser = await updateProfile({
+        ...user,
+        ...formData,
+      } as ProfileResponse);
+
+      if (updatedUser) {
+        setFormData({
+          name: updatedUser.name,
+          phoneNumber: updatedUser.phoneNumber,
+          address: updatedUser.address,
+        });
+      }
+
+      toast.current?.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Profile updated successfully",
+      });
+    } catch (error) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to update profile",
+      });
+    }
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -188,7 +236,10 @@ export default function SettingsPage() {
                       </label>
                       <InputText
                         id="name"
-                        defaultValue={user.name}
+                        value={formData.name || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         className="p-2 border-round-xl text-sm"
                       />
                     </div>
@@ -215,7 +266,13 @@ export default function SettingsPage() {
                       </label>
                       <InputText
                         id="phone"
-                        defaultValue={user.phoneNumber}
+                        value={formData.phoneNumber || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            phoneNumber: e.target.value,
+                          })
+                        }
                         className="p-2 border-round-xl text-sm"
                       />
                     </div>
@@ -228,7 +285,10 @@ export default function SettingsPage() {
                       </label>
                       <InputText
                         id="address"
-                        defaultValue={user.address}
+                        value={formData.address || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, address: e.target.value })
+                        }
                         className="p-2 border-round-xl text-sm"
                       />
                     </div>
@@ -237,7 +297,8 @@ export default function SettingsPage() {
                         label="Update Profile"
                         icon="pi pi-check"
                         className="p-button-raised border-round-xl px-3 py-2 text-sm"
-                        // onClick={handleUpdateProfile}
+                        onClick={handleUpdateProfile}
+                        loading={loading}
                       />
                     </div>
                   </div>
