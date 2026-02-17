@@ -319,14 +319,6 @@ export default function Dashboard() {
                 }}
                 className="w-full h-full"
               />
-              <div className="absolute flex flex-column align-items-center">
-                <span className="text-5xl font-black text-900">
-                  {stats.total}
-                </span>
-                <span className="text-500 text-xs font-bold uppercase tracking-wider">
-                  Total Tasks
-                </span>
-              </div>
             </div>
           </div>
         </motion.div>
