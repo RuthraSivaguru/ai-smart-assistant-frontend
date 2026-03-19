@@ -117,7 +117,7 @@ export default function CalendarPage() {
                       </span>
                     </div>
                     <Tag
-                      value={task.status.replace("_", " ")}
+                      value={task?.status?.replace("_", " ")}
                       severity={
                         task.status === "completed"
                           ? "success"

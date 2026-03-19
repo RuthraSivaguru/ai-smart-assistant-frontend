@@ -34,7 +34,7 @@ export function TaskList({
 
     return (
       <Tag
-        value={rowData.status.replace("_", " ")}
+        value={rowData?.status?.replace("_", " ")}
         severity={severity}
         rounded
         className={`px-3 font-semibold uppercase text-[12px] ${styles.statusTag}`}
